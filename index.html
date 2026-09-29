@@ -63,26 +63,28 @@ const titles={home:'Good afternoon',database:'Database',scan:'Scan',stash:'My St
 function go(id){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===id));document.getElementById('pageTitle').textContent=titles[id];window.scrollTo(0,0)}
 function buildColourMap(){
  const map=document.getElementById('colourmap'); if(!map)return;
- const rows=11, cols=11, cx=5, cy=5;
- for(let y=0;y<rows;y++){for(let x=0;x<cols;x++){
-   const dx=x-cx+(y%2?0.5:0), dy=(y-cy)*0.88, r=Math.sqrt(dx*dx+dy*dy);
-   if(r>5.25) continue;
-   let a=(Math.atan2(dy,dx)*180/Math.PI+360+28)%360;
-   let sat=Math.min(96,58+r*8);
-   let light=Math.max(24,91-r*12);
-   const h=document.createElement('button');
-   h.className='hex'+(((x*7+y*11)%9===0)?' empty':'');
-   h.style.background='hsl('+a+' '+sat+'% '+light+'%)';
-   h.dataset.name=Math.round(a)+'° colour';
-   h.dataset.owned=h.classList.contains('empty')?'false':'true';
-   h.addEventListener('click',()=>{
-     document.querySelectorAll('.hex').forEach(q=>q.classList.remove('selected')); h.classList.add('selected');
-     document.getElementById('hexname').textContent=h.dataset.name;
-     document.getElementById('hexcopy').textContent=h.dataset.owned==='true'?'Matching paints from your stash will appear here.':'No matching paint in your stash yet — browse the database or add to shopping list.';
-     document.getElementById('hexdetail').classList.add('show');
-   });
-   map.appendChild(h);
- }}}
+ map.innerHTML='';
+ const size=35,xStep=30,yStep=34,cx=195,cy=172;
+ let i=0;
+ for(let r=-5;r<=5;r++){for(let q=-5;q<=5;q++){
+  const d=Math.max(Math.abs(q),Math.abs(r),Math.abs(q+r)); if(d>5)continue;
+  const px=cx+q*xStep+r*xStep/2, py=cy+r*yStep;
+  const dx=px-cx,dy=py-cy,angle=(Math.atan2(dy,dx)*180/Math.PI+360)%360;
+  const radius=Math.min(1,Math.hypot(dx,dy)/185);
+  const h=document.createElement('button'),missing=(i++%31===0);
+  h.className='hex'+(missing?' empty':'');
+  h.style.left=(px-size/2)+'px';h.style.top=(py-20)+'px';
+  h.style.background='hsl('+angle+' '+(18+radius*78)+'% '+(96-radius*59)+'%)';
+  h.dataset.name=Math.round(angle)+'° colour';h.dataset.owned=missing?'false':'true';
+  h.onclick=function(){
+   map.querySelectorAll('.hex').forEach(x=>x.classList.remove('selected'));h.classList.add('selected');
+   document.getElementById('hexname').textContent=h.dataset.name;
+   document.getElementById('hexcopy').textContent=missing?'No matching paint in your stash yet — browse the database or add to shopping list.':'Matching paints from your stash will appear here.';
+   document.getElementById('hexdetail').classList.add('show');
+  };
+  map.appendChild(h);
+ }}
+}
 buildColourMap();
 </script>
 </body></html>
