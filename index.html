@@ -22,7 +22,7 @@ nav button{border:0;background:none;color:#818990;font-size:10px;padding:5px 0}n
 .segment{display:flex;background:#15181b;border:1px solid var(--line);padding:4px;border-radius:13px}.segment button{flex:1;padding:9px;border:0;border-radius:9px;background:transparent;color:#8e969d}.segment button.on{background:#2a2f34;color:white}
 .scanner{height:300px;border:1px solid #454c52;border-radius:22px;margin:18px 0;background:linear-gradient(135deg,#16191c,#22272b);display:grid;place-items:center;text-align:center}.scanframe{width:220px;height:150px;border:2px solid #e6e8e9;border-radius:20px;display:grid;place-items:center;color:#aeb5bb}
 .btn{width:100%;border:1px solid #3a4147;background:#23282c;color:white;padding:13px;border-radius:13px;margin:7px 0;font-weight:700}.btn.primary{background:#eef0f1;color:#111}
-.honeycomb{position:relative;width:min(94vw,390px);height:350px;margin:4px auto 18px}.hex{position:absolute;width:35px;height:40px;clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);border:0;padding:0;cursor:pointer;transition:transform .12s,filter .12s;box-shadow:inset 0 0 0 1px rgba(0,0,0,.18)}.hex:hover{filter:brightness(1.12);z-index:2}.hex.selected{outline:3px solid #fff;outline-offset:-4px;z-index:3}.hex.empty{filter:saturate(.18) brightness(.48);opacity:.48}.hexdetail{display:none;margin-top:4px}.hexdetail.show{display:block}.mapkey{display:flex;justify-content:center;gap:18px;font-size:11px;color:var(--muted);margin:-8px 0 14px}.keydot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;border:1px solid #fff}.keydot.empty{background:#30363b;border-color:#59616a}
+.honeycomb{--hex:72px;display:flex;flex-wrap:wrap;justify-content:center;gap:0 6px;padding:10px 0 22px;max-width:390px;margin:auto}.hex{width:var(--hex);height:62px;clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);margin-bottom:-13px;border:0;position:relative;cursor:pointer;transition:transform .15s,filter .15s}.hex:nth-child(9n+6){margin-left:39px}.hex:hover,.hex.selected{transform:scale(1.08);z-index:2;filter:brightness(1.12)}.hex::after{content:attr(data-count);position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-size:12px;font-weight:800;text-shadow:0 1px 3px #000}.hexdetail{display:none;margin-top:8px}.hexdetail.show{display:block}
 .project{padding:16px;border-radius:16px;background:var(--card);border:1px solid var(--line);margin:9px 0}
 </style>
 </head>
@@ -44,10 +44,9 @@ nav button{border:0;background:none;color:#818990;font-size:10px;padding:5px 0}n
 
 <section id="scan" class="page"><div class="segment"><button class="on">Single</button><button>Batch</button></div><div class="segment" style="margin-top:10px"><button class="on">Barcode</button><button>Can</button><button>Colour</button></div><div class="scanner"><div class="scanframe">Camera scanner<br><span class="muted">Prototype interface</span></div></div><button class="btn primary" onclick="alert('Real camera/barcode scanning comes in the functional build.')">Simulate scan</button><button class="btn">Search manually</button></section>
 
-<section id="stash" class="page"><div class="card"><div class="row"><div><div class="big">82</div><div class="muted">active cans</div></div><div><div class="big">47</div><div class="muted">unique colours</div></div></div></div><div class="segment"><button class="on">Grouped</button><button>All colours</button></div><h2>Colour map <span class="muted">· tap a hex</span></h2>
-<div id="colourmap" class="honeycomb" aria-label="Interactive colour honeycomb"></div>
-<div class="mapkey"><span><i class="keydot"></i>In your stash</span><span><i class="keydot empty"></i>Not in stash</span></div>
-<div id="hexdetail" class="card hexdetail"><div class="label">COLOUR FAMILY</div><b id="hexname">Colour</b><div id="hexcopy" class="muted" style="margin-top:5px">Tap a colour to see matching paints.</div></div><h2>Inventory rules</h2><div class="note">Active levels: New · High · Half · Low. Empty cans move to History and do not count as active inventory.</div></section>
+<section id="stash" class="page"><div class="card"><div class="row"><div><div class="big">82</div><div class="muted">active cans</div></div><div><div class="big">47</div><div class="muted">unique colours</div></div></div></div><div class="segment"><button class="on">Grouped</button><button>All colours</button></div><h2>Colour honeycomb <span class="muted">· tap a colour</span></h2><div class="honeycomb">
+<button class="hex" data-name="Navy" data-count="×8" style="background:#243b67"></button><button class="hex" data-name="Teal" data-count="×7" style="background:#2d7180"></button><button class="hex" data-name="Turquoise" data-count="×7" style="background:#51a8b6"></button><button class="hex" data-name="Light Blue" data-count="×6" style="background:#89cbd1"></button><button class="hex" data-name="Ochre" data-count="×5" style="background:#d09442"></button><button class="hex" data-name="Red" data-count="×4" style="background:#ad493b"></button><button class="hex" data-name="Purple" data-count="×5" style="background:#6d315f"></button><button class="hex" data-name="Off White" data-count="×5" style="background:#dedbd2"></button>
+</div><div id="hexdetail" class="card hexdetail"><div class="label">COLOUR GROUP</div><b id="hexname">Colour</b><div class="muted" style="margin-top:5px">This will show the exact brands, shades, quantities and can levels inside this colour family.</div></div><h2>Inventory rules</h2><div class="note">Active levels: New · High · Half · Low. Empty cans move to History and do not count as active inventory.</div></section>
 
 <section id="projects" class="page"><button class="btn primary">＋ New Project</button><div class="project"><b>Saved Palettes</b><div class="muted">Colour ideas and references</div></div><div class="project"><b>Shopping Lists</b><div class="muted">One list shared across paints and projects</div></div><div class="project"><b>Completed Projects</b></div><div class="project"><div class="row"><b>Advanced Project</b><span class="label">PRO</span></div><div class="muted">Dimensions, coverage estimates, stash comparison and quantities.</div></div></section>
 </main>
@@ -61,30 +60,6 @@ nav button{border:0;background:none;color:#818990;font-size:10px;padding:5px 0}n
 <script>
 const titles={home:'Good afternoon',database:'Database',scan:'Scan',stash:'My Stash',projects:'Projects'};
 function go(id){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===id));document.getElementById('pageTitle').textContent=titles[id];window.scrollTo(0,0)}
-function buildColourMap(){
- const map=document.getElementById('colourmap'); if(!map)return;
- map.innerHTML='';
- const size=35,xStep=30,yStep=34,cx=195,cy=172;
- let i=0;
- for(let r=-5;r<=5;r++){for(let q=-5;q<=5;q++){
-  const d=Math.max(Math.abs(q),Math.abs(r),Math.abs(q+r)); if(d>5)continue;
-  const px=cx+q*xStep+r*xStep/2, py=cy+r*yStep;
-  const dx=px-cx,dy=py-cy,angle=(Math.atan2(dy,dx)*180/Math.PI+360)%360;
-  const radius=Math.min(1,Math.hypot(dx,dy)/185);
-  const h=document.createElement('button'),missing=(i++%31===0);
-  h.className='hex'+(missing?' empty':'');
-  h.style.left=(px-size/2)+'px';h.style.top=(py-20)+'px';
-  h.style.background='hsl('+angle+' '+(18+radius*78)+'% '+(96-radius*59)+'%)';
-  h.dataset.name=Math.round(angle)+'° colour';h.dataset.owned=missing?'false':'true';
-  h.onclick=function(){
-   map.querySelectorAll('.hex').forEach(x=>x.classList.remove('selected'));h.classList.add('selected');
-   document.getElementById('hexname').textContent=h.dataset.name;
-   document.getElementById('hexcopy').textContent=missing?'No matching paint in your stash yet — browse the database or add to shopping list.':'Matching paints from your stash will appear here.';
-   document.getElementById('hexdetail').classList.add('show');
-  };
-  map.appendChild(h);
- }}
-}
-buildColourMap();
+document.querySelectorAll('.hex').forEach(h=>h.addEventListener('click',()=>{document.querySelectorAll('.hex').forEach(x=>x.classList.remove('selected'));h.classList.add('selected');document.getElementById('hexname').textContent=h.dataset.name+' '+h.dataset.count;document.getElementById('hexdetail').classList.add('show')}));
 </script>
 </body></html>
